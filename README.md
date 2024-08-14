@@ -52,15 +52,15 @@ Proyek ini adalah API untuk mengelola interaksi dengan WhatsApp menggunakan `wha
 2. **Install Dependensi**
 
 Pastikan Anda memiliki Node.js dan npm terinstal. Kemudian, jalankan perintah berikut untuk menginstal dependensi:
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 3. **Menjalankan Proyek**
 
 Untuk menjalankan server:
-```bash
-npm start
-```
+   ```bash
+   npm start
+   ```
 Lisensi
 Proyek ini dilisensikan di bawah MIT License.
 
