@@ -50,14 +50,12 @@ Proyek ini adalah API untuk mengelola interaksi dengan WhatsApp menggunakan `wha
    ```
 
 2. **Install Dependensi**
-
-Pastikan Anda memiliki Node.js dan npm terinstal. Kemudian, jalankan perintah berikut untuk menginstal dependensi:
+   Pastikan Anda memiliki Node.js dan npm terinstal. Kemudian, jalankan perintah berikut untuk menginstal dependensi:
    ```bash
    npm install
    ```
 3. **Menjalankan Proyek**
-
-Untuk menjalankan server:
+   Untuk menjalankan server:
    ```bash
    npm start
    ```
