@@ -45,7 +45,7 @@ Proyek ini adalah API untuk mengelola interaksi dengan WhatsApp menggunakan `wha
 1. **Clone Repositori**
 
    ```bash
-   git clone [https://github.com/BCIGRA/whats-me.git](https://github.com/BCIGRA/whats-me.git)
+   git clone https://github.com/BCIGRA/whats-me.git
    cd whats-me
    ```
 
