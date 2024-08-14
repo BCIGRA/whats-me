@@ -2,14 +2,22 @@
   "name": "whatsapp-api",
   "version": "1.0.0",
   "description": "_A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_",
-  "main": "index.js",
+  "main": "./src/server.ts",
   "scripts": {
     "start": "npx ts-node ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "whatsapp",
+    "api",
+    "nodejs",
+    "home-assistant",
+    "rest",
+    "web",
+    "automation"
+  ],
+  "author": "0xTrue-Dev",
+  "license": "MIT",
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
