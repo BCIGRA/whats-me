@@ -1,0 +1,18 @@
+body {
+    background-color: #f4f6f9;
+}
+.content-wrapper {
+    min-height: calc(100vh - 112px); /* Adjust height to account for header and footer */
+}
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+}
+#loading {
+    margin-top: 20px;
+}
+#qrImage {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+}
