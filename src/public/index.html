@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="#" class="brand-link">
+                <img src="assets/images/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                    style="opacity: .8">
+                <span class="brand-text font-weight-light d-sm-inline-block">BOT AI</span>
+            </a>
+
+            <div class="sidebar">
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Dashboard
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                    Profile
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h3 class="card-title">Scan QR Code</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="session-form">
+                                        <div class="form-group">
+                                            <label for="sessionInput">Masukkan nomor sesi</label>
+                                            <input type="text" id="sessionInput" class="form-control"
+                                                placeholder="Masukkan nomor sesi" required />
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <button type="submit" class="btn btn-primary">Create Session</button>
+                                            <button id="generateQRButton" type="button" class="btn btn-success"
+                                                data-bs-toggle="modal" data-bs-target="#qrModal" style="display:none;">
+                                                Generate QR Code
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h3 class="card-title">Kirim Pesan</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="sendMessageForm">
+                                        <div class="form-group">
+                                            <label for="sesInput">Masukkan Nomor Sesi</label>
+                                            <input type="text" id="sesInput" class="form-control"
+                                                placeholder="Masukkan nomor sesi" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phoneInput">Nomor Penerima (Dengan kode negara, tanpa
+                                                '+')</label>
+                                            <input type="text" id="phoneInput" class="form-control"
+                                                placeholder="6282298749468" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="messageInput">Pesan</label>
+                                            <textarea id="messageInput" class="form-control" rows="3"
+                                                placeholder="Halo.." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-inline">
+                BOT AI 02
+            </div>
+            <strong>&copy; 2024 <a href="#">BOT AI</a>.</strong> All rights reserved.
+        </footer>
+        <!-- Modal untuk menampilkan QR code -->
+        <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="qrModalLabel">QR Code</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <!-- Spinner Loading -->
+                        <div id="loading" class="spinner-border text-info" role="status" style="display: none; margin: auto;">
+                        </div>
+                        <!-- Status Message -->
+                        <div id="statusMessage" class="text-success text-center" role="status" style="display: none; margin: auto;">
+                            <i id="statusIcon" class="fas fa-check-circle"></i> 
+                            <span>Already connected.</span>
+                        </div>
+                        <!-- QR Code Image -->
+                        <img id="qrImage" src="" alt="QR Code" style="width: 100%; display: none; margin-top: 15px;">
+                        <!-- Countdown Timer -->
+                        <p id="countdown" class="text-info"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE JS -->
+        <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Custom JS -->
+        <script src="assets/js/script.js"></script>
+    </div>
+</body>
+
+</html>
