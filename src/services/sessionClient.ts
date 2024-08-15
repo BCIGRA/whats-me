@@ -21,7 +21,7 @@ export class SessionClient {
                 ],
                 ignoreDefaultArgs: ['--disable-extensions'],
                 executablePath: '/usr/bin/google-chrome',
-                dumpio: true
+                dumpio: false
             },
             authStrategy: new LocalAuth({
                 clientId: this.number
@@ -56,18 +56,39 @@ export class SessionClient {
         this.client.on('ready', () => {
             console.log(`Client is ready for ${this.number}!`);
         });
+        
+        this.client.on('loading_screen', (percent, message) => {
+            console.log(`LOADING SCREEN ${this.number}!`, percent, message);
+        });
+
+        this.client.on('message', async msg => {
+            console.log('MESSAGE RECEIVED', msg);
+        })
 
         this.client.on('disconnected', (reason: string) => {
             console.log(`Client disconnected for ${this.number}:`, reason);
+            // Contoh penggunaan
+            const folderPath = `../.wwebjs_auth/session-${this.number}`;
             // Hapus sesi dari cache
-            this.cleanupSession();
+            this.deleteFolderRecursive(folderPath);
         });
     }
 
-    private cleanupSession(): void {
-        // Hapus sesi dari cache
-        delete SessionClient.clients[this.number];
-    }
+    private deleteFolderRecursive = (folderPath: string) => {
+        if (fs.existsSync(folderPath)) {
+            fs.readdirSync(folderPath).forEach((file) => {
+                const curPath = path.join(folderPath, file);
+                if (fs.statSync(curPath).isDirectory()) {
+                    // Rekursif untuk folder
+                    this.deleteFolderRecursive(curPath);
+                } else {
+                    // Hapus file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(folderPath);
+        }
+    };
 
     public async generateQRCodeWithLogo(qr: string): Promise<string> {
         try {
@@ -78,23 +99,19 @@ export class SessionClient {
 
             ctx.drawImage(qrImage, 0, 0);
 
-            const logoPath = path.join(__dirname, '../../assets/logo.png');
-            if (!fs.existsSync(logoPath)) {
-                throw new Error('Logo file not found.');
-            }
-            const logo = await loadImage(logoPath);
+            // Load WhatsApp logo from URL
+            const logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
+            const logo = await loadImage(logoUrl);
 
-            const logoSize = qrImage.width / 5;
-            const logoX = (qrImage.width - logoSize) / 2;
-            const logoY = (qrImage.height - logoSize) / 2;
+            // Calculate logo position and size
+            const logoSize = 50;
+            const x = (canvas.width - logoSize) / 2;
+            const y = (canvas.height - logoSize) / 2;
 
-            ctx.fillStyle = '#006400'; // Dark green color
-            ctx.beginPath();
-            ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 10, 0, Math.PI * 2);
-            ctx.fill();
+            // Draw the logo in the center of the QR code
+            ctx.drawImage(logo, x, y, logoSize, logoSize);
 
-            ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
-
+            // Convert the canvas to a Data URL
             return canvas.toDataURL();
         } catch (error) {
             console.error('Error generating QR code with logo:', error);
