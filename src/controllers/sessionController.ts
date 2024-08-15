@@ -10,6 +10,45 @@ const waitForClientState = (client: any): Promise<boolean> => {
     });
 };
 
+// Fungsi untuk mendapatkan status dari client
+export const statusClient = async (req: Request, res: Response) => {
+    const { number } = req.params;
+
+    try {
+        const sessionClient = SessionClient.createClient(number);
+        const client = sessionClient.getWhatsAppClient();
+
+        if (!client) {
+            // Jika client tidak ada, kirimkan respons bahwa client belum terdaftar
+            return res.status(404).json({
+                message: `Client dengan nomor ${number} belum terdaftar`,
+                status: `notfound`
+            });
+        }
+
+        console.log(`Mengambil Status Untuk ${number}`);
+
+        // Periksa status sesi
+        const state = await waitForClientState(client);
+
+        if (state) {
+            // Jika sesi sudah aktif
+            return res.status(200).json({
+                message: `Client dengan nomor ${number} sudah terhubung dan aktif`,
+                status: `${state}`
+            });
+        } else {
+            // Jika sesi belum aktif
+            return res.status(200).json({
+                message: `Client dengan nomor ${number} terdaftar tetapi belum terhubung. Harap scan QR code untuk aktivasi`,
+                status: `${state}`
+            });
+        }
+    } catch (error) {
+        res.status(500).send('Failed to get client status: ' + (error as Error).message);
+    }
+};
+
 export const initializeClient = async (req: Request, res: Response) => {
     const { number } = req.params;
 
@@ -22,18 +61,22 @@ export const initializeClient = async (req: Request, res: Response) => {
             return res.status(500).send('Client not found');
         }
 
+        console.log(`Mengatur Sesi Untuk ${number}`);
+
         // Periksa status sesi
         const state = await waitForClientState(client);
 
         if (state) {
             // Jika sesi sudah aktif, kirim respons tanpa QR code
             return res.status(200).json({
-                message: `Sesi sudah aktif untuk nomor ${number}`
+                message: `Sesi sudah aktif untuk nomor ${number}`,
+                status: `${state}`
             });
         } else {
             // Jika client ada tetapi sesi belum aktif, kirimkan respons sukses
             return res.status(200).json({
-                message: `Sesi sudah dibuat untuk nomor ${number} tetapi belum aktif. Scan QR code untuk aktivasi`
+                message: `Sesi sudah dibuat untuk nomor ${number} tetapi belum aktif. Scan QR code untuk aktivasi`,
+                status: `${state}`
             });
         }
     } catch (error) {
@@ -59,6 +102,8 @@ export const getQrCode = async (req: Request, res: Response) => {
         if (!client) {
             return res.status(500).send('Client not found');
         }
+        
+        console.log(`Mengambil QRcode Untuk ${number}`);
 
         // Periksa status sesi
         const state = await waitForClientState(client);
@@ -66,7 +111,8 @@ export const getQrCode = async (req: Request, res: Response) => {
         if (state) {
             // Jika sesi sudah aktif, kirim respons tanpa QR code
             return res.status(200).json({
-                message: `Sesi sudah aktif untuk nomor ${number}`
+                message: `Sesi sudah aktif untuk nomor ${number}`,
+                status: `${state}`
             });
         }
 
@@ -76,6 +122,7 @@ export const getQrCode = async (req: Request, res: Response) => {
 
         res.status(200).json({
             message: `Scan QR code untuk login dengan nomor ${number}`,
+            status: `${state}`,
             qrCodeUrl
         });
 
